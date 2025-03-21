@@ -263,13 +263,14 @@ const Logincustomer = async (req, res) => {
 
  const GetbidByIdCustomer = async (req, res, next) =>{
     try {
-        // const id = req.params.id;
-        let Getcustomer = await Cus.find()
-        // Getcustomer = await Cus.findById(id)
+        const id = req.params.id;
+        let Getcustomer;
+        Getcustomer = await Cus.findById(id)
+        
         
            .then(response => {
                 if (!response) return res.status(404).json({ message: "customer not found" });
-                res.json({ message: "customer found", data: response });
+                res.json(response);
             })
            .catch(err => {
                 res.status(500).json({ error: "Error in fetching customer: " + err.message });
