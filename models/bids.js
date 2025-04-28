@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const BidSchema = new Schema(
     {
-    // supplierId: { type: mongoose.Schema.Types.ObjectId, ref: 'supplier', required: true },
+    
     supplierId:{type:String, ref: 'supplier', required: true},
     riceType: { type: String, required: true },
     quantity: { type: Number, required: true },

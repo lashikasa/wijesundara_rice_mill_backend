@@ -22,7 +22,6 @@ Order.pre('save', function (next) {
     next();
 });
 
-// Ensure virtuals are included when converting to JSON
 Order.set('toJSON', { virtuals: true });
 Order.set('toObject', { virtuals: true });
 const order = mongoose.model('or', Order);

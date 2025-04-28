@@ -26,7 +26,7 @@ const RicePrice = require('./models/prices.js')
 
  const Createbid = async (req, res, next) => {
     try {
-        // const SupplierId = req.user.id;
+        
         const {supplierId,riceType, quantity, biddingPrice } = req.body;
 
         const newBid = new Bids({supplierId,riceType,quantity,biddingPrice});
@@ -118,7 +118,7 @@ const LoginSupplier = async (req, res) => {
         const { supplierEmail, supplierPassword } = req.body;
 
         
-        const supplier = await Supp.findOne({ supplierEmail });
+        const supplier = await Supp.findOne( supplierEmail );
         if (!supplier) {
             return res.status(400).json({ error: "Invalid email or password" });
         }
@@ -147,7 +147,7 @@ const GetbidByIdSupplier = async (req, res, next) =>{
         Getsupplier = await Supp.findById(id)
            .then(response => {
                 if (!response) return res.status(404).json({ message: "supplier not found" });
-                res.json({ message: "supplier found", data: response });
+                res.json(response );
             })
            .catch(err => {
                 res.status(500).json({ error: "Error in fetching bid: " + err.message });
@@ -355,9 +355,9 @@ exports.UpdateCus = UpdateCus;
 const GETorderdet =async (req, res, next) =>{
     try {
 
-        // const Customerid = req.params.id;
+        
         let Getbid =await OR.find()
-        // Getbid = await OR.findById({custoemerId:Customerid})
+        
            .then(response => {
                 res.status(200).json(response );
             })
@@ -371,7 +371,7 @@ const GETorderdet =async (req, res, next) =>{
 
  const CreateOrder = async (req, res, next) => {
     try {
-        // const CustomerId = req.params.id;
+        
         const {customerId, riceType, quantity, price, total} = req.body;
 
 
@@ -466,12 +466,12 @@ const GETricePrcie =async (req, res, next) =>{
 
         
         let Getbid =await RicePrice.find()
-        // Getbid = await OR.findById({custoemerId:Customerid})
+        
            .then(response => {
                 res.status(200).json(response );
             })
            .catch(err => {
-                res.status(500).json({ error: "Error in fetching order details: " + err.message });
+                res.status(500).json({ error: "Error in fetching data details: " + err.message });
             });
     } catch (err) {
         res.status(500).json({ error: "Error in fetching : " + err.message });
@@ -479,3 +479,17 @@ const GETricePrcie =async (req, res, next) =>{
 }
 
 exports.GETricePrcie = GETricePrcie;
+
+const Getprice = async (req,res) => {
+    const riceType = req.params.type;
+    const riceData = await RicePrice.findOne({ riceType });
+    
+    if (riceData) {
+      res.json({ price: riceData.price });
+    } else {
+      res.status(404).json({ message: "Rice type not found" });
+    }
+  };
+
+  exports.Getprice = Getprice;
+  
