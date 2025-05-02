@@ -31,5 +31,5 @@ const Supplier = new Schema(
     }
 );
 
-const Suppliers = mongoose.model('Suppliers', Supplier)
+const Suppliers = mongoose.model('Supplier', Supplier)
 module.exports = Suppliers;

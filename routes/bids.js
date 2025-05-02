@@ -7,7 +7,7 @@ routers.get('/', contrl.GETbids)
 routers.post('/', contrl.Createbid);
 routers.put('/:id', contrl.Updatebid);
 routers.delete('/:id', contrl.Deletebid);
-routers.get('/:id', contrl.GetbidById);
+routers.get('/:supplierId', contrl.GetbidById);
 
 
 module.exports = routers;

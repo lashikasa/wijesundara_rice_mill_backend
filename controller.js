@@ -3,7 +3,8 @@ const Bids = require('./models/bids.js');
 const Supp = require('./models/supplier.js');
 const Cus = require('./models/customer.js');
 const OR = require('./models/order.js');
-const RicePrice = require('./models/prices.js')
+const RicePrice = require('./models/prices.js');
+const stock = require("./models/stock.js");
 
 
  const GETbids =async (req, res, next) =>{
@@ -43,22 +44,25 @@ const RicePrice = require('./models/prices.js')
     }
 }
 
-const GetbidById = async (req, res, next) =>{
+ const GetbidById = async (req, res, next) => {
     try {
-        const id = req.params.id;
-        let Getbid;
-        Getbid = await Bids.findById(id)
-           .then(response => {
-                if (!response) return res.status(404).json({ message: "Bid not found" });
-                res.json({ message: "Bid found", data: response });
-            })
-           .catch(err => {
-                res.status(500).json({ error: "Error in fetching bid: " + err.message });
-            });
+      const supplierid = req.params.supplierId;
+  
+      if (!supplierid) {
+        return res.status(400).json({ message: "Supplier ID is required" });
+      }
+  
+      const bids = await Bids.find({ supplierId: supplierid }).populate('supplierId');
+  
+      if (bids.length === 0) {
+        return res.status(404).json({ message: "No stock found for this supplier" });
+      }
+  
+      res.status(200).json(bids);
     } catch (err) {
-        res.status(500).json({ error: "Error in fetching bid: " + err.message });
+      res.status(500).json({ error: "Error fetching stock data: " + err.message });
     }
- };
+  };
 
  const Updatebid = async (req, res, next) => {
     const id = req.params.id;
@@ -389,23 +393,23 @@ const GETorderdet =async (req, res, next) =>{
     }
 }
 
-const GetbidByIdOrder = async (req, res, next) =>{
+const GetbidByIdOrder = async (req, res, next) => {
     try {
-        const id = req.params.id;
-        let Getbid;
-        Getbid = await OR.findById({id})
-           .then(response => {
-                if (!response) return res.status(404).json({ message: "Bid not found" });
-                res.json({ message: "Bid found", data: response });
-            })
-           .catch(err => {
-                res.status(500).json({ error: "Error in fetching bid: " + err.message });
-            });
+      const id = req.params.id;
+      const bid = await OR.findById(id);
+  
+      if (!bid) {
+        return res.status(404).json({ message: "Bid not found" });
+      }
+  
+      res.json({ message: "Bid found", data: bid });
     } catch (err) {
-        res.status(500).json({ error: "Error in fetching bid: " + err.message });
+      res.status(500).json({ error: "Error in fetching bid: " + err.message });
     }
- };
-
+  };
+  
+  
+  
  const UpdateOrder = async (req, res, next) => {
     const id = req.params.id;
     const { riceType, quantity} = req.body;
@@ -492,4 +496,38 @@ const Getprice = async (req,res) => {
   };
 
   exports.Getprice = Getprice;
+
+  const GetstockbyID = async (req, res) => {
+    try {
+      const supplierId = req.params.supplierId;
+  
+      if (!supplierId) {
+        return res.status(400).json({ message: "Supplier ID is required" });
+      }
+  
+      const stocks = await stock.find({ Supplierid: supplierId }).populate('Supplierid');
+  
+      if (stocks.length === 0) {
+        return res.status(404).json({ message: "No stock found for this supplier" });
+      }
+  
+      res.status(200).json(stocks);
+    } catch (err) {
+      res.status(500).json({ error: "Error fetching stock data: " + err.message });
+    }
+  };
+  
+ 
+
+ const GETstock = async (req, res, next) => {
+    try {
+      const getStock = await stock.find();
+      res.status(200).json(getStock);
+    } catch (err) {
+      res.status(500).json({ error: "Error in fetching data: " + err.message });
+    }
+  };
+  
+ exports.GetstockbyID = GetstockbyID;
+ exports.GETstock = GETstock;
   

@@ -5,10 +5,15 @@ const Schema = mongoose.Schema;
 const BidSchema = new Schema(
     {
     
-    supplierId:{type:String, ref: 'supplier', required: true},
+    supplierId:{type: mongoose.Schema.Types.ObjectId, ref: 'Supplier', required: true },
     riceType: { type: String, required: true },
     quantity: { type: Number, required: true },
     biddingPrice: { type: Number, required: true },
+    status: {
+        type: String,
+        enum: ['accept', 'cancel', null],
+        default: null
+      },
    date: { type: String, default: () => {
   const now = new Date();
   return now.getFullYear() + '.' + 

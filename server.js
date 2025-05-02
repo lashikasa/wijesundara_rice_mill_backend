@@ -7,6 +7,7 @@ const customer_router = require('./routes/customer');
 const supplier_router = require('./routes/supplier');
 const order_router = require('./routes/order');
 const RicePrice_router = require('./routes/Riceprice');
+const stocks = require("./routes/stocks")
 const cors = require('cors');
 
 
@@ -32,6 +33,7 @@ app.use('/api/bids', bids_router);
 app.use('/api/supplier', supplier_router);
 app.use('/api/customer', customer_router);
 app.use('/api/order', order_router);
+app.use("/api/stocks",stocks)
 
 db_connection()
 
