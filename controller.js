@@ -10,9 +10,8 @@ const stock = require("./models/stock.js");
  const GETbids =async (req, res, next) =>{
     try {
 
-        // const Supplierid = req.params.id;
+        
         let Getbid;
-        // Getbid = await Bids.findById({Supplierid})
         Getbid = await Bids.find()
            .then(response => {
                 res.status(200).json(response);
@@ -120,9 +119,8 @@ exports.GetbidById = GetbidById;
 const LoginSupplier = async (req, res) => {
     try {
         const { supplierEmail, supplierPassword } = req.body;
+        const supplier = await Supp.findOne({ supplierEmail });
 
-        
-        const supplier = await Supp.findOne( supplierEmail );
         if (!supplier) {
             return res.status(400).json({ error: "Invalid email or password" });
         }
